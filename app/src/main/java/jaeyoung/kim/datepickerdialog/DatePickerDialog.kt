@@ -37,15 +37,13 @@ class DatePickerDialog(context: Context, onCallbackListner : (year : Int, month 
         changeDay = cal.get(Calendar.DAY_OF_MONTH) + 1
         setValue()
         picker_year.setOnValueChangedListener { picker, oldVal, newVal ->
-            flag = "year"
             cal.set(Calendar.YEAR , newVal)
-            checkDateYear()
+            picker_day.maxValue = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
         }
 
         picker_month.setOnValueChangedListener { picker, oldVal, newVal ->
-            flag = "month"
             cal.set(Calendar.MONTH, newVal-1)
-            checkDateMonth()
+            picker_day.maxValue = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
         }
 
         btn_cancel.setOnClickListener {
@@ -59,46 +57,19 @@ class DatePickerDialog(context: Context, onCallbackListner : (year : Int, month 
 
         this.show()
     }
-
     private fun setValue(){
-        picker_month.minValue = currentMonth
+        picker_month.minValue = MIN_MONTH
         picker_month.maxValue = MAX_MONTH
         picker_month.value = currentMonth
         picker_year.minValue = currentYear
         picker_year.maxValue = MAX_YEAR
         picker_year.value = currentYear
         picker_day.maxValue = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
-        picker_day.minValue = currentDay
+        picker_day.minValue = MIN_DAY
     }
 
-    private fun changeValue(){
-        changeYear = cal.get(Calendar.YEAR)
-        changeMonth = cal.get(Calendar.MONTH) + 1
-        changeDay = cal.get(Calendar.DAY_OF_MONTH) + 1
-    }
 
-    private fun checkDateYear(){
-        changeValue()
-        picker_day.maxValue = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
-        if(currentYear < changeYear){
-            picker_month.minValue = MIN_MONTH
-            picker_day.minValue = MIN_DAY
-        } else {
-            if (currentMonth == changeMonth) picker_day.minValue = currentDay
-            picker_month.minValue = currentMonth
-        }
 
-    }
-
-    private fun checkDateMonth(){
-        changeValue()
-        picker_day.maxValue = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
-        if (currentMonth < changeMonth || currentYear < changeYear) {
-            picker_day.minValue = MIN_DAY
-        } else {
-            picker_day.minValue = currentDay
-        }
-    }
 
     //yyyy년 MM월 dd일
     fun dateFormat1(cal : Calendar) : String{
